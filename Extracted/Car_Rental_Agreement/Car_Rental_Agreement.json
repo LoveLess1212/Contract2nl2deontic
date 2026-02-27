@@ -1,0 +1,40 @@
+{
+  "contractName": "Car Rental Agreement",
+  "involvedParties": [
+    {
+      "name": "Car booking company"
+    },
+    {
+      "name": "Car renters"
+    }
+  ],
+  "penaltyRules": [
+    {
+      "representor": "Car booking company",
+      "deonticType": "Failing Which",
+      "action": {
+        "description": "Provide an upgraded car model.",
+        "triggerCond": "The Car booking company fails to provide the Car renters with the exact vehicle class the Car renters requested in their booking upon the Car renters' arrival.",
+        "note": "The upgraded model must be within the same segment and in a neutral color."
+      }
+    },
+    {
+      "representor": "Car booking company",
+      "deonticType": "Failing Which",
+      "action": {
+        "description": "Provide a comparable car, waive insurance costs, and offer free accessories.",
+        "triggerCond": "The Car booking company fails to provide an upgraded model within the same segment in a neutral color.",
+        "note": "The car must be of a comparable class and in a neutral color. All insurance costs from [trusted Insurer] must be waived. Accessories (e.g., child safety seats) must be offered for free."
+      }
+    },
+    {
+      "representor": "Car booking company",
+      "deonticType": "LCTC",
+      "action": {
+        "description": "Provide a discount on the customer's next rental.",
+        "triggerCond": "The Car booking company fails to deliver a car of a comparable class in a neutral color, waive all insurance costs from [trusted Insurer], and offer accessories (e.g., child safety seats) for free within 120 minutes.",
+        "note": "The discount is calculated proportionally to the duration of the delay."
+      }
+    }
+  ]
+}

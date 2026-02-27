@@ -1,0 +1,3 @@
+∀x. (provide(the Car booking company,x,the exact vehicle class x requested in x's booking upon x's arrival))
+¬((provide(The Car booking company,an upgraded model x)) ∧ ((within the same segment(an upgraded model x)) ∧ (in a neutral color(model x))))
+¬(((deliver(The Car booking company,a car of a comparable class in a neutral color)) ∧ (waive(The Car booking company,all insurance costs from [trusted Insurer]))) ∧ (offer(The Car booking company,customers,accessories (e.g., child safety seats))))

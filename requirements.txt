@@ -1,5 +1,9 @@
 wtpsplit
+python-dotenv
+ollama
+google-generativeai
 openai
+pydantic
 pydantic
 python-dotenv
 torch

@@ -3,7 +3,10 @@ from dotenv import load_dotenv
 from ollama import generate
 from openai import OpenAI
 from structured_output import *
-
+from google import genai
+from google.genai import types
+from api_logger import APILogger, LLMInterceptor
+import os
 load_dotenv()
 
 class OpenAIWrapper:
@@ -55,17 +58,50 @@ class VLLMWrapper:
         client.close()
         return response.choices[0].message.parsed
 
+class GeminiWrapper:
+    def __init__(self, model):
+        self.model = model
+        self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+    
+    def generate(self, text, fmt):
+        response = self.client.models.generate_content(
+            contents = text,
+            model=self.model,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=fmt,
+                temperature=0
+            )
+        )
+        return fmt.model_validate_json(response.text)
+
 class Pipeline:
     def __init__(self, llm, model, logging=False, url="http://0.0.0.0:8000/v1"):
         if llm == 'openai':
-            self.llm = OpenAIWrapper(model)
+            wrapper = OpenAIWrapper(model)
+            wrapper_name = "OpenAIWrapper"
         elif llm == 'ollama':
-            self.llm = OllamaWrapper(model)
+            wrapper = OllamaWrapper(model)
+            wrapper_name = "OllamaWrapper"
         elif llm == 'vllm':
-            self.llm = VLLMWrapper(model,url)
+            wrapper = VLLMWrapper(model,url)
+            wrapper_name = "VLLMWrapper"
+        elif llm == 'gemini':
+            wrapper = GeminiWrapper(model)
+            wrapper_name = "GeminiWrapper"
         else: 
             raise ValueError("LLM is not valid")
-        self.logging=logging
+        
+        self.logging = logging
+        
+        # Wrap with interceptor if logging is enabled
+        if self.logging:
+            self.api_logger = APILogger(
+                console_output=False  # Set to False to only log to file
+            )
+            self.llm = LLMInterceptor(wrapper, self.api_logger, wrapper_name)
+        else:
+            self.llm = wrapper
 
     def log(self, text):
         if self.logging:
